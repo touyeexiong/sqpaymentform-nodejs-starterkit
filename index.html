@@ -71,18 +71,25 @@
               * callback function: cardNonceResponseReceived
               * Triggered when: SqPaymentForm completes a card nonce request
               */
-              cardNonceResponseReceived: function (errors, nonce, cardData) {
+              cardNonceResponseReceived: function (
+                errors,
+                nonce,
+                cardData,
+                billingContact,
+                shippingContact) {
+                const errorList = document.getElementById("errors");
                 if (errors) {
                   let error_html = "";
                   for (var i = 0; i < errors.length; i++) {
                     error_html += "<li> " + errors[i].message + " </li>";
                   }
-                  let errorList = document.getElementById("errors");
                   errorList.innerHTML = error_html;
                   errorList.style.display = 'inline-block';
                   return;
                 }
-               // document.getElementById("errors").style.display = 'none';
+                errorList.style.display = 'none';
+                errorList.innerHTML = "";
+
                 alert(`The generated nonce is:\n${nonce}`);
                 fetch('process-payment', {
                   method: 'POST',
@@ -94,23 +101,23 @@
                     nonce: nonce
                   })
                 })
-                .catch(err => {
-                  alert('Network error: ' + err);
-                })
-                .then(response => {
-                  if (!response.ok) {
-                    return response.text().then(errorInfo => Promise.reject(errorInfo));
-                  }
-                  return response.text();
-                })
-                .then(data => {
-                  console.log(JSON.stringify(data));
-                  alert('Payment complete successfully!\nCheck browser developer consolf form more details');
-                })
-                .catch(err => {
-                  console.error(err);
-                  alert('Payment failed to complete!\nCheck browser developer consolf form more details');
-                });
+                  .catch(err => {
+                    alert('Network error: ' + err);
+                  })
+                  .then(response => {
+                    if (!response.ok) {
+                      return response.text().then(errorInfo => Promise.reject(errorInfo));
+                    }
+                    return response.text();
+                  })
+                  .then(data => {
+                    console.log(JSON.stringify(data));
+                    alert('Payment complete successfully!\nCheck browser developer consolf form more details');
+                  })
+                  .catch(err => {
+                    console.error(err);
+                    alert('Payment failed to complete!\nCheck browser developer consolf form more details');
+                  });
               }
             }
           });
