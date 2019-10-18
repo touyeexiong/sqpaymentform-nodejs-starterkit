@@ -52,13 +52,13 @@ fieldset {
 
 .error {
   float: left;
-  width: calc((100% - 32px));
+  width: calc((100% - 56px));
   margin: 16px 16px 16px 0;
   border: 1px solid #E02F2F;
   border-radius: 6px;
   background-color: white;
   font-size: '16px';
-  padding: 10px;
+  padding: 24px;
 }
 
 

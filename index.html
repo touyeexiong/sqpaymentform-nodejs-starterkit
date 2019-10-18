@@ -14,7 +14,7 @@
 <html>
   <head>
     <!-- link to the SqPaymentForm library -->
-    <script type="text/javascript" src="https://js.squareup.com/v2/paymentform">
+    <script type="text/javascript" src="https://js.squareupsandbox.com/v2/paymentform">
     </script>
 
     <!-- link to the local custom styles for SqPaymentForm -->
@@ -28,7 +28,7 @@
       <div class="third" id="sq-cvv"></div>
       <div class="third" id="sq-postal-code"></div>
       <button id="sq-creditcard" class="button-credit-card" onclick="onGetCardNonce(event)">Pay $1.00</button>
-      <div id="errors" class="error" style="display:none"></div>
+      <ul id="errors" class="error" style="display:none"></ul>
     </div> <!-- end #form-container -->
     <!-- TODO: Add script from step 1.2.3 -->
     <script type="text/javascript">
@@ -37,7 +37,7 @@
             // Initialize the payment form elements
 
             //TODO: Replace with your sandbox application ID
-            applicationId: "YOUR_APPLICATION_ID",
+            applicationId: "sandbox-sq0idb-SAZR9O1n9LxqSyEbXH5O-Q",
             inputClass: 'sq-input',
             autoBuild: false,
             // Customize the CSS for SqPaymentForm iframe elements
