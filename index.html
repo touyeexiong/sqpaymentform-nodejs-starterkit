@@ -73,11 +73,11 @@
               */
               cardNonceResponseReceived: function (errors, nonce, cardData) {
                 if (errors) {
-                  var error_html = "";
+                  let error_html = "";
                   for (var i = 0; i < errors.length; i++) {
                     error_html += "<li> " + errors[i].message + " </li>";
                   }
-                  var errorDiv = document.getElementById("errors");
+                  let errorDiv = document.getElementById("errors");
                   errorDiv.innerHTML = error_html;
                   errorDiv.style.display = 'inline-block';
                   return;
