@@ -77,11 +77,12 @@
                   for (var i = 0; i < errors.length; i++) {
                     error_html += "<li> " + errors[i].message + " </li>";
                   }
-                  let errorDiv = document.getElementById("errors");
-                  errorDiv.innerHTML = error_html;
-                  errorDiv.style.display = 'inline-block';
+                  let errorList = document.getElementById("errors");
+                  errorList.innerHTML = error_html;
+                  errorList.style.display = 'inline-block';
                   return;
                 }
+               // document.getElementById("errors").style.display = 'none';
                 alert(`The generated nonce is:\n${nonce}`);
                 fetch('process-payment', {
                   method: 'POST',
