@@ -74,17 +74,12 @@
               cardNonceResponseReceived: function (errors, nonce, cardData) {
                 if (errors) {
                   var error_html = "";
-                  if (errors.length > 1) {
-                    for (var i = 0; i < errors.length; i++) {
-                      error_html += "<li> " + errors[i].message + " </li>";
-                    }
-                  } else {
-                    error_html = errors[0].message;
+                  for (var i = 0; i < errors.length; i++) {
+                    error_html += "<li> " + errors[i].message + " </li>";
                   }
                   var errorDiv = document.getElementById("errors");
                   errorDiv.innerHTML = error_html;
                   errorDiv.style.display = 'inline-block';
-                  document.getElementById("sq-creditcard").disabled = false;
                   return;
                 }
                 alert(`The generated nonce is:\n${nonce}`);
