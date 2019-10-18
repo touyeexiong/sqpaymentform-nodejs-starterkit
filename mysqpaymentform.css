@@ -50,6 +50,18 @@ fieldset {
   margin: 0 16px 16px 0;
 }
 
+.error {
+  float: left;
+  width: calc((100% - 32px));
+  margin: 16px 16px 16px 0;
+  border: 1px solid #E02F2F;
+  border-radius: 6px;
+  background-color: white;
+  font-size: '16px';
+  padding: 10px;
+}
+
+
 .third:last-of-type {
   margin-right: 0;
 }
@@ -105,4 +117,20 @@ fieldset {
 
 .button-credit-card:hover {
   background-color: #4281CB;
+}
+/* Indicates how Masterpass button will appear */
+.button-masterpass {
+  min-width: 200px;
+  min-height: 40px;
+  max-height: 40px;
+  padding: 0;
+  margin: 10px;
+  background-color: black;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-radius: 5px;
+  border-color: rgb(255, 255, 255);
+  cursor:pointer;
+  display: none;
 }

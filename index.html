@@ -13,8 +13,180 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- link to the SqPaymentForm library -->
+    <script type="text/javascript" src="https://js.squareup.com/v2/paymentform">
+    </script>
+
+    <!-- link to the local custom styles for SqPaymentForm -->
+    <link rel="stylesheet" type="text/css" href="mysqpaymentform.css">
   </head>
   <body>
-    Get ready for your first payment with Square!
+
+    <div id="form-container">
+      <div id="sq-card-number"></div>
+      <div class="third" id="sq-expiration-date"></div>
+      <div class="third" id="sq-cvv"></div>
+      <div class="third" id="sq-postal-code"></div>
+      <button id="sq-creditcard" class="button-credit-card" onclick="onGetCardNonce(event)">Pay $1.00</button>
+      <div id="errors" class="error" style="display:none"></div>
+      <button id="sq-masterpass" class="button-masterpass"></button>
+    </div> <!-- end #form-container -->
+    <!-- TODO: Add script from step 1.2.3 -->
+    <script type="text/javascript">
+          // Create and initialize a payment form object
+          const paymentForm = new SqPaymentForm({
+            // Initialize the payment form elements
+
+            //TODO: Replace with your sandbox application ID
+            applicationId: "sq0idp-y7zxLL6_lrK3E6WOl-WyMg",
+            inputClass: 'sq-input',
+            autoBuild: false,
+            // Customize the CSS for SqPaymentForm iframe elements
+            inputStyles: [{
+              fontSize: '16px',
+              lineHeight: '24px',
+              padding: '16px',
+              placeholderColor: '#a0a0a0',
+              backgroundColor: 'transparent',
+            }],
+            // Initialize the credit card placeholders
+            cardNumber: {
+              elementId: 'sq-card-number',
+              placeholder: 'Card Number'
+            },
+            cvv: {
+              elementId: 'sq-cvv',
+              placeholder: 'CVV'
+            },
+            expirationDate: {
+              elementId: 'sq-expiration-date',
+              placeholder: 'MM/YY'
+            },
+            postalCode: {
+              elementId: 'sq-postal-code',
+              placeholder: 'Postal'
+            },
+            masterpass: {
+              elementId: 'sq-master-pass'
+            },
+            // SqPaymentForm callback functions
+            callbacks: {
+              methodsSupported: function (methods) {
+                var applePayBtn = document.getElementById('sq-apple-pay');
+                var applePayLabel = document.getElementById('sq-apple-pay-label');
+                var masterpassBtn = document.getElementById('sq-masterpass');
+                var masterpassLabel = document.getElementById('sq-masterpass-label');
+
+                console.log(methods)
+                // Only show the button if Apple Pay on the Web is enabled
+                // Otherwise, display the wallet not enabled message.
+                if (methods.applePay === true) {
+                  applePayBtn.style.display = 'inline-block';
+                  applePayLabel.style.display = 'none';
+                }
+                // Only show the button if Masterpass is enabled
+                // Otherwise, display the wallet not enabled message.
+                if (methods.masterpass === true) {
+                  masterpassBtn.style.display = 'inline-block';
+                  masterpassLabel.style.display = 'none';
+                }
+              },
+              createPaymentRequest: function () {
+                return {
+                    requestShippingAddress: true,
+                    requestBillingInfo: true,
+                    shippingContact: {
+                      familyName: "Buyer",
+                      givenName: "The",
+                      email: "thebuyer@example.com",
+                      country: "USA",
+                      region: "CA",
+                      city: "San Francisco",
+                      addressLines: [
+                        "123 Main St"
+                      ],
+                      postalCode: "94114"
+                    },
+                    currencyCode: "USD",
+                    countryCode: "US",
+                    total: {
+                      label: "devs-Acceptance",
+                      amount: "5",
+                      pending: false
+                    }
+                };
+              },
+              /*
+              * callback function: cardNonceResponseReceived
+              * Triggered when: SqPaymentForm completes a card nonce request
+              */
+              cardNonceResponseReceived: function (errors, nonce, cardData) {
+                if (errors) {
+                  var error_html = "";
+                  if (errors.length > 1) {
+                    for (var i = 0; i < errors.length; i++) {
+                      error_html += "<li> " + errors[i].message + " </li>";
+                    }
+                  } else {
+                    error_html = errors[0].message;
+                  }
+                  var errorDiv = document.getElementById("errors");
+                  errorDiv.innerHTML = error_html;
+                  errorDiv.style.display = 'inline-block';
+                  document.getElementById("sq-creditcard").disabled = false;
+                  return;
+                }
+                alert(`The generated nonce is:\n${nonce}`);
+                fetch('process-payment', {
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    nonce: nonce
+                  })
+                })
+                .catch(err => {
+                  alert('Network error: ' + err);
+                })
+                .then(response => {
+                  if (!response.ok) {
+                    return response.text().then(errorInfo => Promise.reject(errorInfo));
+                  }
+                  return response.text();
+                })
+                .then(data => {
+                  console.log(JSON.stringify(data));
+                  alert('Payment complete successfully!\nCheck browser developer consolf form more details');
+                })
+                .catch(err => {
+                  console.error(err);
+                  alert('Payment failed to complete!\nCheck browser developer consolf form more details');
+                });
+              }
+            }
+          });
+
+          paymentForm.build();
+          //TODO: paste code from step 1.2.5
+          // onGetCardNonce is triggered when the "Pay $1.00" button is clicked
+          function onGetCardNonce(event) {
+            // Don't submit the form until SqPaymentForm returns with a nonce
+            event.preventDefault();
+            // Request a nonce from the SqPaymentForm object
+            try {
+              paymentForm.requestCardNonce();
+            } catch ( e) {
+              if (e.name === "FormNotReadyError") {
+                console.log(e.message);
+              } else {
+                throw e; // let others bubble up
+              }
+            }
+          }
+
+    </script>
+
   </body>
 </html>
