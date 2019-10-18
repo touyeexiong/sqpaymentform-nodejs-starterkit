@@ -29,7 +29,6 @@
       <div class="third" id="sq-postal-code"></div>
       <button id="sq-creditcard" class="button-credit-card" onclick="onGetCardNonce(event)">Pay $1.00</button>
       <div id="errors" class="error" style="display:none"></div>
-      <button id="sq-masterpass" class="button-masterpass"></button>
     </div> <!-- end #form-container -->
     <!-- TODO: Add script from step 1.2.3 -->
     <script type="text/javascript">
@@ -66,56 +65,8 @@
               elementId: 'sq-postal-code',
               placeholder: 'Postal'
             },
-            masterpass: {
-              elementId: 'sq-master-pass'
-            },
             // SqPaymentForm callback functions
             callbacks: {
-              methodsSupported: function (methods) {
-                var applePayBtn = document.getElementById('sq-apple-pay');
-                var applePayLabel = document.getElementById('sq-apple-pay-label');
-                var masterpassBtn = document.getElementById('sq-masterpass');
-                var masterpassLabel = document.getElementById('sq-masterpass-label');
-
-                console.log(methods)
-                // Only show the button if Apple Pay on the Web is enabled
-                // Otherwise, display the wallet not enabled message.
-                if (methods.applePay === true) {
-                  applePayBtn.style.display = 'inline-block';
-                  applePayLabel.style.display = 'none';
-                }
-                // Only show the button if Masterpass is enabled
-                // Otherwise, display the wallet not enabled message.
-                if (methods.masterpass === true) {
-                  masterpassBtn.style.display = 'inline-block';
-                  masterpassLabel.style.display = 'none';
-                }
-              },
-              createPaymentRequest: function () {
-                return {
-                    requestShippingAddress: true,
-                    requestBillingInfo: true,
-                    shippingContact: {
-                      familyName: "Buyer",
-                      givenName: "The",
-                      email: "thebuyer@example.com",
-                      country: "USA",
-                      region: "CA",
-                      city: "San Francisco",
-                      addressLines: [
-                        "123 Main St"
-                      ],
-                      postalCode: "94114"
-                    },
-                    currencyCode: "USD",
-                    countryCode: "US",
-                    total: {
-                      label: "devs-Acceptance",
-                      amount: "5",
-                      pending: false
-                    }
-                };
-              },
               /*
               * callback function: cardNonceResponseReceived
               * Triggered when: SqPaymentForm completes a card nonce request
