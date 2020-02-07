@@ -14,12 +14,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const squareConnect = require('square-connect');
+require('dotenv').config();
 
 const app = express();
 const port = 3000;
 
 // Set the Access Token
-const accessToken = 'REPLACE_WITH_ACCESS_TOKEN';
+const accessToken = process.env.ACCESS_TOKEN;
+console.log(process.env.ACCESS_TOKEN);
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -48,7 +51,7 @@ app.post('/process-payment', async (req, res) => {
   const request_body = {
     source_id: request_params.nonce,
     amount_money: {
-      amount: 100, // $1.00 charge
+      amount: 200000, // $1.00 charge
       currency: 'USD'
     },
     idempotency_key: idempotency_key
